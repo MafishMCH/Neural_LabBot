@@ -17,6 +17,7 @@ def load_images_to_array(classification_label_and_values):
     """Loads images to array"""
     training_image_array = array([zeros(IMAGE_DIMENSIONS[0] * IMAGE_DIMENSIONS[1])])
     training_image_value = array([[0, 0, 0, 0, 0]])
+    i = 0
     print("Loading images to array...")
     for class_label, class_value in classification_label_and_values.iteritems():
         for filename in glob.glob("./"+class_label+"/*"):
@@ -24,6 +25,8 @@ def load_images_to_array(classification_label_and_values):
             resized_image_array = imresize(image_array, IMAGE_DIMENSIONS)
             training_image_array = r_[training_image_array, [resized_image_array.flatten()]]
             training_image_value = r_[training_image_value, [class_value]]
+	    print("i: ", i)
+	    i = i + 1
     return (training_image_array, training_image_value)
 
 def cost_function_wrapper(theta, cost_function_parameters):
@@ -96,15 +99,19 @@ def main():
     x_values = image_array[1:, :]
     y_values = image_values[1:, :]
     input_layer_size = x_values.shape[1]
+    print(input_layer_size)
+    print("init data...")
     initial_theta = initialize_theta(input_layer_size, hidden_layer_size,
                                      number_of_labels)
     input_parameters = prepare_input_parameters(input_layer_size,
                                                 hidden_layer_size,
                                                 number_of_labels,
                                                 lambda_value)
+    print("prepare training set...")
     training_parameters = prepare_training_parameters(x_values, y_values)
     function_parameters = prepare_function_parameters(input_parameters,
                                                       training_parameters)
+    print("train...")    
     (optimized_theta, function_min_value, info_dict) = minimize_cost_function(initial_theta,
                                                                               function_parameters)
     print(function_min_value)

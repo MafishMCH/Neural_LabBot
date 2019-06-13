@@ -19,7 +19,7 @@ def cost_function(cost_function_parameters):
 
     theta_1 = theta_1_parameters.reshape(hidden_layer_size, input_layer_size + 1)
     theta_2 = theta_2_parameters.reshape(num_labels, (hidden_layer_size + 1))
-
+    
     input_examples_size = x_values.shape[0]
 
     hidden_layer_input = numpy.c_[numpy.ones(input_examples_size), x_values].dot(theta_1.T)
